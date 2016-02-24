@@ -7,6 +7,10 @@ object
 """
 
 import math
+try:
+    import Queue
+except:
+    import queue as Queue
 
 class BinaryTreeNode (object):
     def __init__(self, value):
@@ -54,7 +58,7 @@ class BinaryTree (object):
         -> String Object of the Tree
         """
 
-        returnString = self.orderTraversal()
+        returnString = self.getStructure()
 
         if returnString is None:
             return "Tree is Empty"
@@ -74,9 +78,7 @@ class BinaryTree (object):
         if self.root is None:
             return None
         else:
-            elementsList = self.orderTraversal().split()
-
-        return len(elementsList)
+            return len(self.orderTraversal().split())
 
     def getLevel(self):
         """
@@ -253,6 +255,54 @@ class BinaryTree (object):
         if traversalType == "post":
             self.traversalString = self.traversalString + str(node.value) + " "
 
+    def getStructure(self):
+        """
+        Obtains the structure of the tree
+        through a Breadth First Search
+
+        Return
+        -> None if root node is None
+        -> String ordered by the actual tree structure (BFS)
+        """
+
+        if self.root is None:
+            return None
+
+        structureString = ""
+        elementsQueue = Queue.Queue()
+
+        elementsQueue.put(self.root)
+
+        while not elementsQueue.empty():
+            element = elementsQueue.get()
+            if element != "X":
+                structureString += str(element.value)
+
+                if element.left is not None:
+                    elementsQueue.put(element.left)
+                else:
+                    elementsQueue.put("X")
+
+                if element.right is not None:
+                    elementsQueue.put(element.right)
+                else:
+                    elementsQueue.put("X")
+            else:
+                structureString += str(element)
+
+        returnString = ""
+        currentLevel = 1
+        maxLevel = self.getLevel()
+
+        while currentLevel <= maxLevel:
+            loopString = structureString[:2 ** (currentLevel - 1)]
+            structureString = structureString[2 ** (currentLevel - 1):]
+
+            returnString += loopString + "\n"
+            currentLevel += 1
+
+        return returnString[:-1] # Last charater is a new line
+
     """ END Class """
 
 if __name__ != "__main__":
@@ -265,4 +315,4 @@ node = numbers.add(3)
 node = numbers.add(6)
 node = numbers.add(7)
 if numbers.find(7):
-    print numbers.getLevel()
+    print numbers
