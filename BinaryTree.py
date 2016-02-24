@@ -9,8 +9,11 @@ any object
 class BinaryTreeNode (object):
     def __init__(self, value):
         """
-        Initializes a Node for a
-        Binary tree
+        Initializes a Node for a Binary
+        tree.
+
+        Node contains a value, a left
+        child and a right child
 
         Parameters
         value   (object): The value given to the new Node itself
@@ -129,6 +132,51 @@ class BinaryTree (object):
             else:
                 return self._add(value, node.right)
 
+    def find(self, value):
+        """
+        Wrapper method for calling the recursive
+        find method '_find'
+
+        Return
+        -> None if root node is None
+        -> Node returned by _find
+
+        Parameters
+        value   (object): The value to be searched for in the tree
+        """
+
+        if self.root is None:
+            return None
+        else:
+            return self._find(value, self.root)
+
+    def _find(self, value, node):
+        """
+        Finds a value in the Binary tree
+        using the value passed by recursion
+
+        Return
+        -> None if search is unsuccessful
+        -> Node at which value is found
+
+        Parameters
+        value           (object): The value to be added to the tree
+        node    (BinaryTreeNode): The Binary Tree Node at which value
+                                  has to be added
+        """
+
+        if value == node.value:
+            return node
+        elif value < node.value:
+            if node.left is None:
+                return None
+            else:
+                return self._find(value, node.left)
+        else:
+            if node.right is None:
+                return None
+            else:
+                return self._find(value, node.right)
 
 
 
@@ -141,4 +189,5 @@ node, value = numbers.add(4)
 node, value = numbers.add(3)
 node, value = numbers.add(6)
 node, value = numbers.add(7)
-print numbers
+if numbers.find(7):
+    print numbers
