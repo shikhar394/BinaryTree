@@ -1,9 +1,9 @@
 """
-This is a binary tree module
-in python using classes
+This is a industry class binary
+tree module in python
 
-Safe to use the Tree with
-any object
+Safe to use the Tree with any
+object
 """
 
 class BinaryTreeNode (object):
@@ -55,7 +55,34 @@ class BinaryTree (object):
         if self.root is None:
             return "Tree is Empty"
         else:
-            self._inOrderTraversal(self.root)
+            returnString = self.orderTraversal()
+
+        if returnString is None:
+            return ""
+        else:
+            return returnString
+
+    def orderTraversal(self, traversalType = "in"):
+        """
+        Wrapper method for calling the recursive
+        traversing method '_orderTraversal'
+
+        Return
+        -> None if root node is None
+        -> String ordered as per the type passed
+
+        Parameters
+        traversalType   (string): Type of traversal. Read below
+                                  for further information
+        """
+
+        if self.root is None:
+            return None
+
+        if traversalType in ("in", "pre", "post"):
+            self._orderTraversal(self.root, traversalType)
+        else:
+            return None
 
         """ Reset the string for further calls """
         returnString = self.traversalString[0:-1] # Last Element is a space
@@ -63,26 +90,37 @@ class BinaryTree (object):
 
         return returnString
 
-    def _inOrderTraversal(self, node):
+    def _orderTraversal(self, node, traversalType):
         """
         Recursive method for getting a
-        string from an in order traversal
-        of the tree
+        string from a traversal of the
+        tree
 
         Return
-        -> String ordered as per an in order traversal of tree
+        -> String ordered as per a traversal of tree
 
         Parameters
         node    (BinaryTreeNode): Node at which traversal begins
+        traversalType   (string): Type of traversal to be performed
+                                  "in"  : In-Order Traversal
+                                  "pre" : Pre-Order Traversal
+                                  "post": Post-Order Traversal
         """
 
-        if node.left is not None:
-            self._inOrderTraversal(node.left)
+        if traversalType == "pre":
+            self.traversalString = self.traversalString + str(node.value) + " "
 
-        self.traversalString = self.traversalString + str(node.value) + " "
+        if node.left is not None:
+            self._orderTraversal(node.left, traversalType)
+
+        if traversalType == "in":
+            self.traversalString = self.traversalString + str(node.value) + " "
 
         if node.right is not None:
-            self._inOrderTraversal(node.right)
+            self._orderTraversal(node.right, traversalType)
+
+        if traversalType == "post":
+            self.traversalString = self.traversalString + str(node.value) + " "
 
     def add(self, value):
         """
@@ -90,8 +128,8 @@ class BinaryTree (object):
         adding method '_add'
 
         Return
-        -> Root Node and value added to it
-        -> Node and value returned by _add
+        -> Root Node
+        -> Node returned by _add
 
         Parameters
         value   (object): The value to be added to the tree
@@ -99,7 +137,7 @@ class BinaryTree (object):
 
         if self.root is None:
             self.root = BinaryTreeNode(value)
-            return self.root, value
+            return self.root
         else:
             return self._add(value, self.root)
 
@@ -110,7 +148,7 @@ class BinaryTree (object):
 
         Return
         -> None is value is None
-        -> Node at which value is inserted, and the value added
+        -> Node at which value is inserted
 
         Parameters
         value           (object): The value to be added to the tree
@@ -122,13 +160,13 @@ class BinaryTree (object):
         if value < node.value:
             if node.left is None:
                 node.left = BinaryTreeNode(value)
-                return node.left, value
+                return node.left
             else:
                 return self._add(value, node.left)
         else:
             if node.right is None:
                 node.right = BinaryTreeNode(value)
-                return node.right, value
+                return node.right
             else:
                 return self._add(value, node.right)
 
