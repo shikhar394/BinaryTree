@@ -6,6 +6,8 @@ Safe to use the Tree with any
 object
 """
 
+import math
+
 class BinaryTreeNode (object):
     def __init__(self, value):
         """
@@ -59,65 +61,43 @@ class BinaryTree (object):
         else:
             return returnString
 
-    def orderTraversal(self, traversalType = "in"):
+    def getSize(self):
         """
-        Wrapper method for calling the recursive
-        traversing method '_orderTraversal'
+        Obtains the number of elements currently
+        present in the tree
 
         Return
         -> None if root node is None
-        -> String ordered as per the type passed
-
-        Parameters
-        traversalType   (string): Type of traversal. Read below
-                                  for further information
+        -> Integer representing # of elements
         """
 
         if self.root is None:
             return None
-
-        if traversalType in ("in", "pre", "post"):
-            self._orderTraversal(self.root, traversalType)
         else:
-            return None
+            elementsList = self.orderTraversal().split()
 
-        """ Reset the string for further calls """
-        returnString = self.traversalString[0:-1] # Last Element is a space
-        self.traversalString = ""
+        return len(elementsList)
 
-        return returnString
-
-    def _orderTraversal(self, node, traversalType):
+    def getLevel(self):
         """
-        Recursive method for getting a
-        string from a traversal of the
-        tree
+        Obtains the level of the tree
+        using logarithmic arithmetic
 
         Return
-        -> String ordered as per a traversal of tree
+        -> None if root Node is None
+        -> Integer representing the level of tree
 
-        Parameters
-        node    (BinaryTreeNode): Node at which traversal begins
-        traversalType   (string): Type of traversal to be performed
-                                  "in"  : In-Order Traversal
-                                  "pre" : Pre-Order Traversal
-                                  "post": Post-Order Traversal
+        Formula
+        -> Get the log of the # of elements in base 2.
+        -> Floor the result
+        -> Add 1 to the floor
         """
 
-        if traversalType == "pre":
-            self.traversalString = self.traversalString + str(node.value) + " "
-
-        if node.left is not None:
-            self._orderTraversal(node.left, traversalType)
-
-        if traversalType == "in":
-            self.traversalString = self.traversalString + str(node.value) + " "
-
-        if node.right is not None:
-            self._orderTraversal(node.right, traversalType)
-
-        if traversalType == "post":
-            self.traversalString = self.traversalString + str(node.value) + " "
+        if self.root is None:
+            return None
+        else:
+            treeLength = self.getSize()
+            return int(math.floor(math.log(treeLength, 2)) + 1)
 
     def add(self, value):
         """
@@ -213,16 +193,76 @@ class BinaryTree (object):
             else:
                 return self._find(value, node.right)
 
+    def orderTraversal(self, traversalType = "in"):
+        """
+        Wrapper method for calling the recursive
+        traversing method '_orderTraversal'
+
+        Return
+        -> None if root node is None
+        -> String ordered as per the type passed
+
+        Parameters
+        traversalType   (string): Type of traversal. Read below
+                                  for further information
+        """
+
+        if self.root is None:
+            return None
+
+        if traversalType in ("in", "pre", "post"):
+            self._orderTraversal(self.root, traversalType)
+        else:
+            return None
+
+        """ Reset the string for further calls """
+        returnString = self.traversalString[0:-1] # Last Element is a space
+        self.traversalString = ""
+
+        return returnString
+
+    def _orderTraversal(self, node, traversalType):
+        """
+        Recursive method for getting a
+        string from a traversal of the
+        tree
+
+        Return
+        -> String ordered as per a traversal of tree
+
+        Parameters
+        node    (BinaryTreeNode): Node at which traversal begins
+        traversalType   (string): Type of traversal to be performed
+                                  "in"  : In-Order Traversal
+                                  "pre" : Pre-Order Traversal
+                                  "post": Post-Order Traversal
+        """
+
+        if traversalType == "pre":
+            self.traversalString = self.traversalString + str(node.value) + " "
+
+        if node.left is not None:
+            self._orderTraversal(node.left, traversalType)
+
+        if traversalType == "in":
+            self.traversalString = self.traversalString + str(node.value) + " "
+
+        if node.right is not None:
+            self._orderTraversal(node.right, traversalType)
+
+        if traversalType == "post":
+            self.traversalString = self.traversalString + str(node.value) + " "
+
     """ END Class """
 
 if __name__ != "__main__":
     exit(0)
 
 numbers = BinaryTree()
-node, value = numbers.add(5)
-node, value = numbers.add(4)
-node, value = numbers.add(3)
-node, value = numbers.add(6)
-node, value = numbers.add(7)
+node = numbers.add(5)
+node = numbers.add(4)
+node = numbers.add(3)
+node = numbers.add(6)
+node = numbers.add(7)
 if numbers.find(7):
-    print numbers
+    print numbers.getLevel()
