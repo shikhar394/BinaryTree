@@ -52,13 +52,10 @@ class BinaryTree (object):
         -> String Object of the Tree
         """
 
-        if self.root is None:
-            return "Tree is Empty"
-        else:
-            returnString = self.orderTraversal()
+        returnString = self.orderTraversal()
 
         if returnString is None:
-            return ""
+            return "Tree is Empty"
         else:
             return returnString
 
