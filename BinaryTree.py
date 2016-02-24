@@ -213,7 +213,7 @@ class BinaryTree (object):
             else:
                 return self._find(value, node.right)
 
-
+    """ END Class """
 
 if __name__ != "__main__":
     exit(0)
