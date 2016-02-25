@@ -268,15 +268,28 @@ class BinaryTree (object):
         if self.root is None:
             return None
 
-        structureString = ""
+        # We need Queue for BFS
         elementsQueue = Queue.Queue()
 
+        structureList = []
+        returnString = ""
+
+        currentLevel = 1
+        maxLevel = self.getLevel()
+
+        # Add root node to List to begin with
         elementsQueue.put(self.root)
 
+        """
+        Perform BFS and get all elements into a List.
+
+        Will add 'X' into structureList for any None
+        existent child
+        """
         while not elementsQueue.empty():
             element = elementsQueue.get()
             if element != "X":
-                structureString += str(element.value)
+                structureList.append(element.value)
 
                 if element.left is not None:
                     elementsQueue.put(element.left)
@@ -288,17 +301,45 @@ class BinaryTree (object):
                 else:
                     elementsQueue.put("X")
             else:
-                structureString += str(element)
+                structureList.append(element)
 
-        returnString = ""
-        currentLevel = 1
-        maxLevel = self.getLevel()
+        # Get rid of the extra 'X's at (maxLevel + 1)
+        treeLength = len(structureList[:(2 ** maxLevel) - 1])
+        #print treeLength
 
         while currentLevel <= maxLevel:
-            loopString = structureString[:2 ** (currentLevel - 1)]
-            structureString = structureString[2 ** (currentLevel - 1):]
+            """
+            Get the element belonging in this level of the tree
+            and then move the main list forward to start from
+            the first element of the next level
+            """
+            loopList = structureList[:2 ** (currentLevel - 1)]
+            structureList = structureList[2 ** (currentLevel - 1):]
 
-            returnString += loopString + "\n"
+            """
+            Iterate for each element in this level
+            and follow the algorithm for adding it
+            to the returnString
+            """
+            for data in loopList:
+                numSpaces = int(math.floor(treeLength / 2))
+                for i in range(numSpaces):
+                    returnString += " "
+                returnString += str(data)
+                for i in range(numSpaces):
+                    returnString += " "
+                returnString += " "
+
+            returnString = returnString[:-1] # Last element is a space
+
+            """
+            Get the number of elements for a child
+            after moving forward one level
+            """
+            treeLength = int(math.floor(treeLength / 2))
+            #print treeLength
+
+            returnString += "\n"
             currentLevel += 1
 
         return returnString[:-1] # Last charater is a new line
@@ -310,9 +351,7 @@ if __name__ != "__main__":
 
 numbers = BinaryTree()
 node = numbers.add(5)
-node = numbers.add(4)
 node = numbers.add(3)
-node = numbers.add(6)
 node = numbers.add(7)
 if numbers.find(7):
     print numbers
